@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+  reverse-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web-secure.address=:443"
+      - "--providers.file.watch=true"
+      - "--providers.file.filename=/etc/traefik/dynamic-traefik.toml"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
