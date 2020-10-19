@@ -2,20 +2,13 @@ version: "3.3"
 
 services:
   traefik:
-    build:
-      dockerfile: Dockerfile
-      context: .
+    image: traefik:v1.7
     container_name: "traefik"
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+    command: --api --docker
     ports:
       - "80:80"
       - "8080:8080"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     labels:
-      - "traefik.enable=false"
-      - "traefik.http.routers.api.rule=Host(`${TRAEFIK_DOMAIN}`)"
+      - "traefik.http.routers.api.rule=Host:${TRAEFIK_DOMAIN}"
